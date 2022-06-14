@@ -10,7 +10,7 @@ function Profile() {
                 <img src={context.photos[0].value} alt='profile-img' />
             </div>
             <div className='text'>
-                <h4>{context.displayName}</h4>
+                <h5>{context.displayName}</h5>
             </div>
 
         </div>
