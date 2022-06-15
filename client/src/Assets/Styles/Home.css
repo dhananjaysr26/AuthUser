@@ -1,0 +1,102 @@
+.editor-container {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+.note-editor {
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.note-editor .title input {
+  width: 100%;
+  padding: 5px;
+  font-size: larger;
+  border: none;
+}
+
+.note-editor .title input:focus {
+  outline: none;
+}
+.note-editor .text-area textarea {
+  width: 100%;
+  padding: 5px;
+  font-size: medium;
+  border: none;
+  resize: none;
+}
+
+.note-editor .text-area textarea:focus {
+  outline: none;
+}
+.mybtn {
+  float: right;
+  margin-right: 10px;
+  padding: 9px 25px;
+  background: rgb(255, 255, 255);
+  color: rgb(249, 15, 15);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.1s ease 0s;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.active-btn {
+  float: right;
+  padding: 9px 25px;
+  background: red;
+  color: white;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.1s ease 0s;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.notes-container {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.notes-items {
+  display: flex;
+  padding: 1rem;
+  padding: 2px;
+  @media (min-width: 40rem) {
+    width: 50%;
+  }
+  @media (min-width: 56rem) {
+    width: 33.3333%;
+  }
+}
+.notes-card {
+  background-color: white;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 5px;
+  padding: 5px;
+  min-width: 15rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+.notes-card .title {
+  border-bottom: 1px solid red;
+  border-radius: 10px;
+  text-align: center;
+}
+.notes-card .note {
+  padding: 20px;
+  font-style: normal;
+}
