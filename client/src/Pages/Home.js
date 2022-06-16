@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import myContext from '../Context/useContext';
 import '../Assets/Styles/Home.css'
 import { RiDeleteBinLine } from "react-icons/ri";
+import axios from 'axios';
 
 
 const Home = () => {
@@ -11,8 +12,43 @@ const Home = () => {
     const [notes, setNotes] = useState({
         title: "",
         note: ""
-    });
+    })
+    const [myNotes, setMyNotes] = useState([]);
+
+    useEffect(() => {
+        axios.get("/getnotes").then((res) => {
+            setMyNotes(res.data.notes)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, [showEditor])
     const context = useContext(myContext);
+    const saveNote = () => {
+        if (notes.title !== "" && notes.note !== "") {
+            axios.post("/note/create", notes).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log(err)
+            })
+            setShowEditor(false);
+            setSaveBtn(false)
+            setNotes({
+                title: "",
+                note: ""
+            })
+        } else {
+            alert("Fill Note!")
+        }
+
+    }
+    const deleteNote = (id) => {
+        console.log("Hello Delete")
+        axios.get("/deletenote", { id: id }).then((res) => {
+            console.log(res)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
 
     return (
         <div>
@@ -29,7 +65,7 @@ const Home = () => {
                             value={notes.note} />
                     </div>
                     <div className='btn-section' hidden={!showEditor}>
-                        <button className={saveBtn ? "active-btn" : "mybtn"} onClick={() => console.log(notes)}>Save</button>
+                        <button className={saveBtn ? "active-btn" : "mybtn"} onClick={saveNote}>Save</button>
                         <button className='mybtn' onClick={() => {
                             setShowEditor(false)
                             setNotes({ title: "", note: "" })
@@ -38,19 +74,23 @@ const Home = () => {
                 </div>
             </div>
             <div className='notes-container'>
-                <div className='notes-items'>
-                    <div className='notes-card' onFocus={() => setDeleteBtn(0)}>
-                        <div className='title'>
-                            <h1>Title</h1>
-                        </div>
-                        <div className='note'>
-                            <h3>My Notes ksnknsnfnns</h3>
-                        </div>
-                        <RiDeleteBinLine className='icons' />
-
-                    </div>
-
-                </div>
+                {
+                    myNotes.length ? myNotes.map((data) => {
+                        return (
+                            <div className='notes-items'>
+                                <div className='notes-card' onFocus={() => setDeleteBtn(0)}>
+                                    <div className='title'>
+                                        <h1>{data.title}</h1>
+                                    </div>
+                                    <div className='note'>
+                                        <h3>{data.note}</h3>
+                                    </div>
+                                    <RiDeleteBinLine className='icons' onClick={() => deleteNote(data._id)} />
+                                </div>
+                            </div>
+                        )
+                    }) : <h2>Notes Not Found!</h2>
+                }
             </div>
         </div>
     )

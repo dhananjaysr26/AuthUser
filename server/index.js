@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 import passport from 'passport'
 import { createRequire } from 'module';
+import UserData from './models/users.js';
+import NotesData from './models/notes.js';
 const require = createRequire(import.meta.url);
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -47,11 +49,19 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
 },
     function (accessToken, refreshToken, profile, cb) {
-        // this will call on successful login
-        // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        //     return cb(err, user);
-        // });
-        console.log(profile)
+        UserData.findOne({ user_id: profile.id }, async (err, doc) => {
+            if (err) {
+                return cb(err, null)
+            }
+            if (!doc) {
+                const newUser = new UserData({
+                    user_id: profile.id,
+                    name: profile.displayName,
+                    profile_pic_url: profile.photos[0].value
+                })
+                await newUser.save();
+            }
+        })
         cb(null, profile)
     }
 ));
@@ -72,7 +82,19 @@ passport.use(new TwitterStrategy({
     callbackURL: "/auth/twitter/callback"
 },
     function (token, tokenSecret, profile, cb) {
-        console.log(profile)
+        UserData.findOne({ user_id: profile.id }, async (err, doc) => {
+            if (err) {
+                return cb(err, null)
+            }
+            if (!doc) {
+                const newUser = new UserData({
+                    user_id: profile.id,
+                    name: profile.displayName,
+                    profile_pic_url: profile.photos[0].value
+                })
+                await newUser.save();
+            }
+        })
         cb(null, profile)
     }
 ));
@@ -87,7 +109,79 @@ app.get('/auth/twitter/callback',
     });
 
 app.get("/getuser", (req, res) => {
-    res.send(req.user)
+    if (req.user) {
+        res.send(req.user)
+    } else {
+        res.status(401).send("Un-Authorized Access!")
+    }
+
+})
+app.post("/note/create", (req, res) => {
+    if (req.user) {
+        NotesData.findOne({ user_id: req.user.id }, async (err, doc) => {
+            if (err) {
+                return cb(err, null)
+            }
+            if (!doc) {
+                const newNote = new NotesData({
+                    user_id: req.user.id,
+                    notes: [{
+                        title: req.body.title,
+                        note: req.body.note
+                    }]
+                })
+                await newNote.save();
+            } else {
+                console.log("Adding New Value!")
+                NotesData.findOneAndUpdate({
+                    user_id: req.user.id
+                }, {
+                    $push: {
+                        notes: [
+                            {
+                                title: req.body.title,
+                                note: req.body.note
+
+                            }
+                        ]
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+
+            }
+        })
+    } else {
+        res.status(401).send("Un-Authorized Access!")
+    }
+})
+app.get("/getnotes", (req, res) => {
+    if (req.user) {
+        NotesData.findOne({ user_id: req.user.id }, async (err, doc) => {
+            if (err) {
+                return cb(err, null)
+            }
+            if (doc) {
+                res.status(200).send(doc)
+            }
+        })
+
+    } else {
+        res.status(401).send("Un-Authorized Access!")
+    }
+})
+
+app.get("/deletenote", (req, res) => {
+    console.log(req.body.id)
+    NotesData.updateOne({
+        user_id: req.user.id
+    }, {
+        $pull: {
+            notes: { _id: req.body.id }
+        }
+    }, (err) => {
+        console.log(err)
+    })
 })
 app.post("/logout", (req, res) => {
     if (req.user) {
