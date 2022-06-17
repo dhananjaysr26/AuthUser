@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
-import myContext from '../Context/useContext';
 import '../Assets/Styles/Home.css'
 import { RiDeleteBinLine } from "react-icons/ri";
 import axios from 'axios';
+import myContext from '../Context/useContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
+    const navigate = useNavigate()
     const [showEditor, setShowEditor] = useState(false)
     const [saveBtn, setSaveBtn] = useState(false)
     const [deleteBtn, setDeleteBtn] = useState(1)
@@ -14,40 +16,49 @@ const Home = () => {
         note: ""
     })
     const [myNotes, setMyNotes] = useState([]);
-
+    const context = useContext(myContext)
     useEffect(() => {
         axios.get("/getnotes").then((res) => {
             setMyNotes(res.data.notes)
         }).catch((err) => {
             console.log(err)
         })
+
     }, [showEditor])
-    const context = useContext(myContext);
     const saveNote = () => {
-        if (notes.title !== "" && notes.note !== "") {
-            axios.post("/note/create", notes).then((res) => {
-                console.log(res)
-            }).catch((err) => {
-                console.log(err)
-            })
-            setShowEditor(false);
-            setSaveBtn(false)
-            setNotes({
-                title: "",
-                note: ""
-            })
+        if (Object.keys(context).length !== 0) {
+            if (notes.title !== "" && notes.note !== "") {
+                axios.post("/note/create", notes).then((res) => {
+                    console.log(res)
+                }).catch((err) => {
+                    console.log(err)
+                })
+                setShowEditor(false);
+                setSaveBtn(false)
+                setNotes({
+                    title: "",
+                    note: ""
+                })
+            } else {
+                alert("Fill Note!")
+            }
         } else {
-            alert("Fill Note!")
+            alert("Login to save your Note!")
+            navigate("/login")
         }
+
 
     }
     const deleteNote = (id) => {
-        console.log("Hello Delete")
-        axios.get("/deletenote", { id: id }).then((res) => {
+        console.log("Hello ID")
+        console.log(id)
+        axios.patch("/deletenote", { id: id }).then((res) => {
             console.log(res)
+            setShowEditor(0)
         }).catch((err) => {
             console.log(err)
         })
+
     }
 
     return (

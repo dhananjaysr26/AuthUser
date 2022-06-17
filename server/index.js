@@ -116,6 +116,9 @@ app.get("/getuser", (req, res) => {
     }
 
 })
+app.get("/", (req, res) => {
+    res.send("Hello MyNotes!")
+})
 app.post("/note/create", (req, res) => {
     if (req.user) {
         NotesData.findOne({ user_id: req.user.id }, async (err, doc) => {
@@ -131,6 +134,7 @@ app.post("/note/create", (req, res) => {
                     }]
                 })
                 await newNote.save();
+                res.status(200).send("Notes Created")
             } else {
                 console.log("Adding New Value!")
                 NotesData.findOneAndUpdate({
@@ -148,6 +152,7 @@ app.post("/note/create", (req, res) => {
                 }, (err) => {
                     console.log(err)
                 })
+                res.status(200).send("Note Added!")
 
             }
         })
@@ -171,16 +176,20 @@ app.get("/getnotes", (req, res) => {
     }
 })
 
-app.get("/deletenote", (req, res) => {
-    console.log(req.body.id)
+app.patch("/deletenote", (req, res) => {
     NotesData.updateOne({
         user_id: req.user.id
     }, {
         $pull: {
             notes: { _id: req.body.id }
         }
-    }, (err) => {
-        console.log(err)
+    }, (err, doc) => {
+        if (err) {
+            res.status(300).send(err)
+        }
+        if (doc) {
+            res.status(200).send("Notes Deleted!")
+        }
     })
 })
 app.post("/logout", (req, res) => {

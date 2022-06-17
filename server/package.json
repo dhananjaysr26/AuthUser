@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "heroku-prebuild":"npm install",
+    "dev": "nodemon index.js",
+    "build":"npm build"
   },
   "author": "",
   "license": "ISC",
