@@ -17,8 +17,6 @@ dotenv.config()
 
 // import appRouter from "./src/routes/appRouter.js";
 const app = express();
-const PORT = process.env.PORT;
-
 
 app.use(express.json())
 app.use(cors({
@@ -207,7 +205,7 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology
     .then(() => console.log(`DB Connected!\n`))
     .catch((err) => console.log(err.message))
 
-app.listen(PORT, () => console.log(`Server Running on PORT:${PORT}`))
+app.listen(process.env.PORT, () => console.log(`Server Running on PORT:${process.env.PORT}`))
 // app.use(appRouter);
 
 
