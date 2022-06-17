@@ -9,7 +9,7 @@ function Navbar() {
     const [menuClicked, setmenuClicked] = useState(1);
     const context = useContext(myContext);
     const logout = () => {
-        axios.post("/logout").then(res => {
+        axios.post("https://mynotes26.herokuapp.com/logout").then(res => {
             if (res.data) {
                 window.location.href = "/"
             }

@@ -73,7 +73,7 @@ app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
         // Successful authentication, redirect home.
-        res.redirect('http://localhost:3000/');
+        res.redirect('https://mynotes26.netlify.app/');
     });
 // Auth reqTwitter
 passport.use(new TwitterStrategy({
@@ -105,7 +105,7 @@ app.get('/auth/twitter/callback',
     passport.authenticate('twitter', { failureRedirect: '/login' }),
     function (req, res) {
         // Successful authentication, redirect home.
-        res.redirect('http://localhost:3000/');
+        res.redirect('https://mynotes26.netlify.app/');
     });
 
 app.get("/getuser", (req, res) => {
