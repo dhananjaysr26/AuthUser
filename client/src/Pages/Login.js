@@ -6,8 +6,8 @@ const Login = () => {
         <div className='wrapper'>
             <div className='container'>
                 <h1>Login to Continue..</h1>
-                <a href='https://mynotes26.herokuapp.com/auth/google' className="social-login google-login">Login with Google</a>
-                <a href='https://mynotes26.herokuapp.com/auth/twitter' className="social-login twitter-login">Login with Twitter</a>
+                <a href='http://localhost:5000/auth/google' className="social-login google-login">Login with Google</a>
+                <a href='http://localhost:5000/auth/twitter' className="social-login twitter-login">Login with Twitter</a>
             </div>
 
         </div>

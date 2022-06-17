@@ -18,7 +18,7 @@ const Home = () => {
     const [myNotes, setMyNotes] = useState([]);
     const context = useContext(myContext)
     useEffect(() => {
-        axios.get("https://mynotes26.herokuapp.com/getnotes").then((res) => {
+        axios.get("http://localhost:5000/getnotes").then((res) => {
             setMyNotes(res.data.notes)
         }).catch((err) => {
             console.log(err)
@@ -28,7 +28,7 @@ const Home = () => {
     const saveNote = () => {
         if (Object.keys(context).length !== 0) {
             if (notes.title !== "" && notes.note !== "") {
-                axios.post("https://mynotes26.herokuapp.com/note/create", notes).then((res) => {
+                axios.post("http://localhost:5000/note/create", notes).then((res) => {
                     console.log(res)
                 }).catch((err) => {
                     console.log(err)
@@ -52,7 +52,7 @@ const Home = () => {
     const deleteNote = (id) => {
         console.log("Hello ID")
         console.log(id)
-        axios.patch("https://mynotes26.herokuapp.com/deletenote", { id: id }).then((res) => {
+        axios.patch("http://localhost:5000/deletenote", { id: id }).then((res) => {
             console.log(res)
             setShowEditor(0)
         }).catch((err) => {

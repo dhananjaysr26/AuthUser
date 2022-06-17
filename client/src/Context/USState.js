@@ -6,7 +6,7 @@ const USState = (props) => {
     const [userObj, setUserObj] = useState({})
 
     useEffect(() => {
-        axios.get("https://mynotes26.herokuapp.com/getuser", { withCredentials: true }).then((res) => {
+        axios.get("http://localhost:5000/getuser", { withCredentials: true }).then((res) => {
             if (res.data) {
                 setUserObj(res.data);
                 console.log(res.data)
